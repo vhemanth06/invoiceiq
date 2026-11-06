@@ -1,0 +1,41 @@
+# Expected outcomes, in the order they must run on a freshly reset DB (the ledger builds up).
+- file: 01_happy_acme_inv1042.pdf
+  label: Happy path - Acme INV-1042
+  expected: APPROVE
+- file: 02_split_brightline_m1.pdf
+  label: "Edge 1: split invoicing, milestone 1"
+  expected: APPROVE
+- file: 03_split_brightline_m2.pdf
+  label: "Edge 1: split invoicing, milestone 2"
+  expected: APPROVE
+- file: 04_split_brightline_m3.pdf
+  label: "Edge 1: split invoicing, milestone 3 (over-bills PO)"
+  expected: REVIEW
+  must_include_rules: [R16_CUMULATIVE_PO]
+- file: 05_duplicate_acme_inv1042R_scanned.pdf
+  label: "Edge 2: disguised duplicate INV/1042-R (scanned)"
+  expected: REJECT
+  must_include_rules: [R19_EXACT_DUPLICATE]
+- file: 06_tax_inclusive_deccan.pdf
+  label: "Edge 3: tax-inclusive pricing"
+  expected: APPROVE
+  must_include_rules: [R21_TAX_RECONCILED]
+- file: 07_scanned_nopo_nimbus.pdf
+  label: "Edge 4: scanned, no PO, blurred total"
+  expected: REVIEW
+  must_include_rules: [R02_CONFIDENCE, R12_PO_INFERRED]
+- file: 08_bank_change_acme.pdf
+  label: "Bonus: bank account changed"
+  expected: REVIEW
+  must_include_rules: [R11_BANK_MATCH]
+- file: 09_unapproved_orbit.pdf
+  label: "Bonus: unapproved vendor"
+  expected: REJECT
+  must_include_rules: [R09_VENDOR_APPROVED]
+- file: 10_bundled_amc.pdf
+  label: "Happy path - bundled lump-sum AMC"
+  expected: APPROVE
+- file: 11_credit_note_acme.pdf
+  label: "Bonus: credit note sent as invoice"
+  expected: REVIEW
+  must_include_rules: [R23_DOCUMENT_TYPE]

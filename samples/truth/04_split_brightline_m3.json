@@ -1,0 +1,72 @@
+{
+  "vendor_name": {
+    "value": "BrightLine IT Services LLP",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "vendor_gstin": {
+    "value": "29AAKFB5678K1Z2",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_number": {
+    "value": "BLIT/2026/102",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_date": {
+    "value": "02 Nov 2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "due_date": {
+    "value": "17 Dec 2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "po_reference": {
+    "value": "#1052",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "currency": {
+    "value": "INR",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "line_items": [
+    {
+      "description": "Milestone 3 - Rollout and hypercare support",
+      "quantity": 1,
+      "unit_price": 162000,
+      "amount": 162000,
+      "hsn_sac": "998313",
+      "is_bundled": false
+    }
+  ],
+  "subtotal": {
+    "value": "1,62,000.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "tax": {
+    "cgst": 0,
+    "sgst": 0,
+    "igst": 29160.0,
+    "other": 0,
+    "rate_percent": 18,
+    "tax_inclusive": false
+  },
+  "total": {
+    "value": "Rs. 1,91,160.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "bank_account_last4": {
+    "value": "8870",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "document_type": "invoice",
+  "notes": "Milestone billing 3 of 3"
+}

@@ -1,0 +1,72 @@
+{
+  "vendor_name": {
+    "value": "Orbit Office Solutions",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "vendor_gstin": {
+    "value": "27AAGCO3456P1Z1",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_number": {
+    "value": "OOS/778",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_date": {
+    "value": "25-Oct-2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "due_date": {
+    "value": "24-Nov-2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "po_reference": {
+    "value": "PO-2026-1099",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "currency": {
+    "value": "INR",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "line_items": [
+    {
+      "description": "Ergonomic office chairs",
+      "quantity": 10,
+      "unit_price": 8500,
+      "amount": 85000,
+      "hsn_sac": "9401",
+      "is_bundled": false
+    }
+  ],
+  "subtotal": {
+    "value": "85,000.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "tax": {
+    "cgst": 0,
+    "sgst": 0,
+    "igst": 15300.0,
+    "other": 0,
+    "rate_percent": 18,
+    "tax_inclusive": false
+  },
+  "total": {
+    "value": "Rs. 1,00,300.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "bank_account_last4": {
+    "value": "1190",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "document_type": "invoice",
+  "notes": null
+}

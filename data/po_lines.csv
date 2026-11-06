@@ -1,0 +1,13 @@
+po_number,line_no,description,quantity,unit_price,amount
+PO-2026-1041,1,Industrial safety gloves (box of 100),40,1500,60000
+PO-2026-1041,2,Hydraulic hose assembly 1/2 inch,20,2000,40000
+PO-2026-1044,1,Bearing kit SKF 6205,50,1000,50000
+PO-2026-1052,1,Milestone 1 - Discovery and solution design,1,200000,200000
+PO-2026-1052,2,Milestone 2 - Build and integration,1,180000,180000
+PO-2026-1052,3,Milestone 3 - Rollout and hypercare support,1,120000,120000
+PO-2026-1063,1,Corrugated shipping boxes 5-ply,2000,30,60000
+PO-2026-1063,2,Stretch wrap film roll,120,200,24000
+PO-2026-1071,1,Cloud hosting services - monthly,1,60000,60000
+PO-2026-1075,1,Backup storage add-on 2 TB,1,15000,15000
+PO-2026-1080,1,Annual maintenance contract (AMC) - IT infrastructure,1,120000,120000
+PO-2026-0990,1,Industrial safety gloves (box of 100),100,1500,150000

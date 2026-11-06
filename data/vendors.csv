@@ -1,0 +1,6 @@
+vendor_id,name,aliases,gstin,state,approved,bank_last4,payment_terms_days
+V001,Acme Industrial Supplies Pvt Ltd,Acme Industrial; ACME Supplies,36AABCA1234F1Z5,Telangana,true,4521,30
+V002,BrightLine IT Services LLP,Brightline IT; BLIT,29AAKFB5678K1Z2,Karnataka,true,8870,45
+V003,Deccan Packaging Co.,Deccan Pack,36AAFCD9012M1Z8,Telangana,true,3302,30
+V004,Orbit Office Solutions,Orbit Office,27AAGCO3456P1Z1,Maharashtra,false,1190,30
+V005,Nimbus Cloud Hosting,Nimbus,07AAICN7788Q1Z4,Delhi,true,6650,15

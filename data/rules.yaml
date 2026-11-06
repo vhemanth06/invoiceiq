@@ -1,0 +1,25 @@
+company:
+  name: Zamp Demo Buyer Pvt Ltd
+  gstin: 36AAACZ0001A1Z9
+  state: Telangana
+tolerances:
+  amount_pct: 2.0              # invoice vs PO total, percent
+  amount_abs_cap: 5000         # ...but never more than Rs 5,000 absolute
+  line_price_pct: 1.0          # unit price variance per line
+  arithmetic_rounding: 1.0     # Rs 1 rounding allowance on sums
+  cumulative_block_pct: 10.0   # cumulative over-billing above this % is a hard block
+confidence:
+  min_field_confidence: 0.80   # below this, a critical field forces REVIEW
+  critical_fields: [vendor_name, invoice_number, invoice_date, total]
+  min_po_match_score: 0.75     # inferred PO match must exceed this
+  po_match_margin: 0.15        # best match must beat runner-up by this
+duplicates:
+  date_window_days: 15
+  amount_pct: 0.5
+  invoice_no_similarity: 85    # RapidFuzz ratio
+dates:
+  max_age_days: 180
+  allow_future_days: 3
+  reference_date: null         # null = today; set YYYY-MM-DD to freeze "today" (tests)
+approval:
+  auto_approve_limit: 300000   # above this, always REVIEW (authority limit)

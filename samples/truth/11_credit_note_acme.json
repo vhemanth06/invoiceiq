@@ -1,0 +1,72 @@
+{
+  "vendor_name": {
+    "value": "Acme Industrial Supplies Pvt Ltd",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "vendor_gstin": {
+    "value": "36AABCA1234F1Z5",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_number": {
+    "value": "CN-2026-014",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_date": {
+    "value": "30/10/2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "due_date": {
+    "value": null,
+    "confidence": 0,
+    "source": "missing"
+  },
+  "po_reference": {
+    "value": "PO-2026-1041",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "currency": {
+    "value": "INR",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "line_items": [
+    {
+      "description": "Return of damaged safety gloves against INV-1042",
+      "quantity": 5,
+      "unit_price": 1500,
+      "amount": 7500,
+      "hsn_sac": "4015",
+      "is_bundled": false
+    }
+  ],
+  "subtotal": {
+    "value": "7,500.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "tax": {
+    "cgst": 675.0,
+    "sgst": 675.0,
+    "igst": 0,
+    "other": 0,
+    "rate_percent": 18,
+    "tax_inclusive": false
+  },
+  "total": {
+    "value": "Rs. 8,850.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "bank_account_last4": {
+    "value": "4521",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "document_type": "credit_note",
+  "notes": "Credit note against invoice INV-1042"
+}
