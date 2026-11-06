@@ -37,6 +37,58 @@ def po_lines(po_number: str | None = None) -> list[dict]:
         return [l.model_dump() for l in s.exec(q)]
 
 
+def _blank(v) -> bool:
+    return v is None or (isinstance(v, float) and v != v) or (isinstance(v, str) and not v.strip())
+
+
+def po_line_rows(edited, known_pos: set[str]) -> tuple[list[dict], list[str]]:
+    """Clean PO lines edited on the Master Data page. Returns (rows to save, errors).
+
+    Fully empty rows are dropped; a blank amount becomes quantity x unit_price; a blank line_no
+    becomes the next number on that PO.
+    """
+    raw = edited.to_dict("records") if hasattr(edited, "to_dict") else list(edited)
+    rows, errors, next_no = [], [], {}
+    for i, r in enumerate(raw, 1):
+        if all(_blank(r.get(k)) for k in ("po_number", "description", "quantity", "unit_price", "amount")):
+            continue
+        po = str(r.get("po_number") or "").strip()
+        desc = str(r.get("description") or "").strip()
+        if po not in known_pos:
+            errors.append(f"Row {i}: PO '{po}' does not exist; add it under Purchase orders first.")
+            continue
+        if not desc:
+            errors.append(f"Row {i}: description is required.")
+            continue
+        try:
+            qty, price = float(r.get("quantity")), float(r.get("unit_price"))
+        except (TypeError, ValueError):
+            errors.append(f"Row {i} ({po}): quantity and unit price must be numbers.")
+            continue
+        amount = round(qty * price, 2) if _blank(r.get("amount")) else float(r["amount"])
+        if abs(amount - qty * price) > 1:
+            errors.append(f"Row {i} ({po}): amount {amount:,.2f} is not quantity x unit price ({qty * price:,.2f}).")
+            continue
+        rows.append({"po_number": po, "line_no": None if _blank(r.get("line_no")) else int(r["line_no"]),
+                     "description": desc, "quantity": qty, "unit_price": price, "amount": amount})
+    for r in rows:
+        next_no[r["po_number"]] = max(next_no.get(r["po_number"], 0), r["line_no"] or 0)
+    for r in rows:
+        if r["line_no"] is None:
+            next_no[r["po_number"]] += 1
+            r["line_no"] = next_no[r["po_number"]]
+    return rows, errors
+
+
+def subtotal_gaps(rows: list[dict], pos: list[dict]) -> list[tuple[str, tuple[float, float]]]:
+    """POs whose lines do not add up to the PO subtotal (a warning, not an error)."""
+    sums: dict[str, float] = {}
+    for r in rows:
+        sums[r["po_number"]] = sums.get(r["po_number"], 0) + r["amount"]
+    return [(p["po_number"], (round(sums[p["po_number"]], 2), p["subtotal"])) for p in pos
+            if p["po_number"] in sums and abs(sums[p["po_number"]] - p["subtotal"]) > 1]
+
+
 def save_master(model, rows: list[dict]) -> None:
     """Replace one master table with edited rows (Master Data page)."""
     with _s() as s:

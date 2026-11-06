@@ -19,7 +19,6 @@ st.write("Upload a vendor invoice (digital or scanned). An LLM reads it; determi
          "Every stage is visible live and stored for replay.")
 st.markdown('<div class="iq-flow">' + " → ".join(f'<span class="st">{i} {n}</span>' for i, n in
                                                  enumerate(STAGE_NAMES, 1)) + "</div>", unsafe_allow_html=True)
-st.info("**The LLM reads; the rules decide.** No language model ever decides whether money gets paid.")
 
 runs = repo.list_runs()
 c = st.columns(4)

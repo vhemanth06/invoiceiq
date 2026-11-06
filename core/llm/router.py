@@ -84,12 +84,12 @@ def extract(payload: Payload, use_cache: bool | None = None) -> tuple[ExtractedI
 
 
 def explain(prompt: str) -> tuple[str, str] | None:
-    """Free-text completion for explanations. Returns (text, provider) or None if nobody can."""
+    """Free-text completion for explanations. Returns (text, model used) or None if nobody can."""
     for prov in _providers():
         if not prov.available():
             continue
         try:
-            return prov.text(prompt), prov.name
+            return prov.text(prompt), prov.model or prov.name  # e.g. "openai/gpt-oss-120b", not "groq"
         except Exception as e:
             logger.warning(f"{prov.name} explanation failed: {e}")
     return None

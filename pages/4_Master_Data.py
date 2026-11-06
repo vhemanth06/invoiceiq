@@ -3,7 +3,8 @@ import streamlit as st
 
 from core import config
 from core.db import repo
-from core.db.schema import PurchaseOrder, Vendor
+from core.db.repo import po_line_rows, subtotal_gaps
+from core.db.schema import POLine, PurchaseOrder, Vendor
 from core.db.seed import ensure_seeded, seed
 from ui import theme
 from ui.sidebar import controls
@@ -33,8 +34,19 @@ with tab_p:
     if st.button("Save purchase orders"):
         repo.save_master(PurchaseOrder, p)
         st.success("Purchase orders saved.")
-    st.caption("PO lines")
-    st.dataframe(repo.po_lines(), hide_index=True, width="stretch")
+    st.caption("PO lines: add a row per item. Leave amount blank to fill in quantity x unit price.")
+    cols = ["po_number", "line_no", "description", "quantity", "unit_price", "amount"]
+    lines = st.data_editor([{c: l[c] for c in cols} for l in repo.po_lines()], num_rows="dynamic",
+                           width="stretch", key="po_lines", column_order=cols, hide_index=True)
+    if st.button("Save PO lines"):
+        rows, errors = po_line_rows(lines, {p["po_number"] for p in repo.purchase_orders()})
+        if errors:
+            st.error("Not saved:\n\n" + "\n\n".join(errors))
+        else:
+            repo.save_master(POLine, rows)
+            st.success(f"{len(rows)} PO lines saved.")
+            for po, gap in subtotal_gaps(rows, repo.purchase_orders()):
+                st.warning(f"{po}: lines add up to ₹{gap[0]:,.2f} but the PO subtotal is ₹{gap[1]:,.2f}.")
 with tab_r:
     r = config.load_rules()
     t, c, d = r["tolerances"], r["confidence"], r["duplicates"]
