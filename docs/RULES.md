@@ -1,6 +1,6 @@
 # Rules
 
-All thresholds live in `data/rules.yaml` and are editable on the Master Data page. Rules are re-read on
+All thresholds live in `data/rules.yaml` and are editable on the Setup page. Rules are re-read on
 every run.
 
 ## Thresholds and rationale
@@ -68,5 +68,5 @@ else:                                      APPROVE
 
 ## Changing rules
 
-Edit `data/rules.yaml` or use **Master Data → Rules**. The next run uses the new values. Example for the
+Edit `data/rules.yaml` or use **Setup → Rules**. The next run uses the new values. Example for the
 demo: lower `approval.auto_approve_limit` to 100000 and rerun the Acme happy path: APPROVE becomes REVIEW.

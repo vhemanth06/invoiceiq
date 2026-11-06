@@ -111,7 +111,7 @@ if section == SECTIONS[1]:
     st.caption("Select a row to open its full trace.")
     if sel.selection.rows:
         st.session_state["run_id"] = table.iloc[sel.selection.rows[0]]["id"]
-        st.switch_page("pages/3_Run_Detail.py")
+        st.switch_page("pages/3_Audit_Trail.py")
 
 if section == SECTIONS[2]:
     if review.empty:
@@ -133,4 +133,4 @@ if section == SECTIONS[2]:
                 st.rerun()
             if z.button("Open", key=f"o-{r.id}"):
                 st.session_state["run_id"] = r.id
-                st.switch_page("pages/3_Run_Detail.py")
+                st.switch_page("pages/3_Audit_Trail.py")

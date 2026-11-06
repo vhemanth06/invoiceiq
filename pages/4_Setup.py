@@ -1,4 +1,4 @@
-"""Master Data: vendors, POs and rule thresholds, editable live; plus 'Reset demo data'."""
+"""Setup: vendors, POs and rule thresholds, editable live; plus 'Reset demo data'."""
 import streamlit as st
 
 from core import config
@@ -9,16 +9,16 @@ from core.db.seed import ensure_seeded, seed
 from ui import theme
 from ui.sidebar import controls
 
-st.set_page_config(page_title="Master Data · InvoiceIQ", layout="wide")
+st.set_page_config(page_title="Setup · InvoiceIQ", layout="wide")
 theme.inject()
 ensure_seeded()
 controls()
-st.title("Master Data")
+st.title("Setup")
 
 with st.container(border=True):
     a, b = st.columns([3, 1])
     a.write("**Reset demo data** reseeds vendors and POs from CSV and clears all runs, findings and the invoice "
-            "ledger. Do this before a demo: the split-invoice and duplicate cases depend on run order.")
+            "ledger.")
     if b.button("Reset demo data", type="primary"):
         seed()
         st.success("Demo data reset.")

@@ -42,7 +42,7 @@ def _blank(v) -> bool:
 
 
 def po_line_rows(edited, known_pos: set[str]) -> tuple[list[dict], list[str]]:
-    """Clean PO lines edited on the Master Data page. Returns (rows to save, errors).
+    """Clean PO lines edited on the Setup page. Returns (rows to save, errors).
 
     Fully empty rows are dropped; a blank amount becomes quantity x unit_price; a blank line_no
     becomes the next number on that PO.
@@ -90,7 +90,7 @@ def subtotal_gaps(rows: list[dict], pos: list[dict]) -> list[tuple[str, tuple[fl
 
 
 def save_master(model, rows: list[dict]) -> None:
-    """Replace one master table with edited rows (Master Data page)."""
+    """Replace one master table with edited rows (Setup page)."""
     with _s() as s:
         for obj in s.exec(select(model)):
             s.delete(obj)

@@ -1,4 +1,4 @@
-"""Run Detail: replay any historical run's full trace from stored events."""
+"""Audit Trail: replay any historical run's full trace from stored events."""
 import streamlit as st
 
 from core.db import repo
@@ -8,11 +8,11 @@ from ui.components import render_run
 from ui.formatting import esc, local, ms
 from ui.sidebar import controls
 
-st.set_page_config(page_title="Run Detail · InvoiceIQ", layout="wide")
+st.set_page_config(page_title="Audit Trail · InvoiceIQ", layout="wide")
 theme.inject()
 ensure_seeded()
 controls()
-st.title("Run Detail")
+st.title("Audit Trail")
 
 runs = repo.list_runs()
 if not runs:

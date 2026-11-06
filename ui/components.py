@@ -1,6 +1,6 @@
 """Reusable UI pieces: stage cards, decision banner, finding pills, document preview, full run view.
 
-render_run() is shared by the Process page (after a live run) and Run Detail (replay), so the two
+render_run() is shared by the Process page (after a live run) and Audit Trail (replay), so the two
 views are built from the same stored events and cannot drift apart.
 """
 from __future__ import annotations
@@ -196,7 +196,7 @@ def render_run(run: dict, show_preview: bool = True) -> None:
             orig = json.loads(dup["evidence_json"]).get("original_run")
             if orig and st.button(f"Open original invoice run {orig}", key=f"orig-{run['id']}"):
                 st.session_state["run_id"] = orig
-                st.switch_page("pages/3_Run_Detail.py")
+                st.switch_page("pages/3_Audit_Trail.py")
     with tabs[4]:
         payload = {k: run[k] for k in ("id", "file_name", "outcome", "decision", "extraction", "normalized", "context")}
         payload["findings"] = run["findings"]

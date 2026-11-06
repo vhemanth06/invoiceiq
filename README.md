@@ -64,6 +64,6 @@ pytest                                               # 119 tests; add RUN_LIVE=1
   ("manual entry needed"). Tesseract OCR is used as a last resort only if the binary is installed.
 - Field-level highlighting on the page image (bounding boxes) is not implemented.
 - SQLite + Streamlit is a prototype stack; production would be Postgres + an API + a queue.
-- Saving rules from the Master Data page rewrites `data/rules.yaml` without its comments
+- Saving rules from the Setup page rewrites `data/rules.yaml` without its comments
   (thresholds are documented in docs/RULES.md).
 - Sample data uses fixed 2026 dates; tests freeze "today" at 2026-11-06 via `dates.reference_date`.

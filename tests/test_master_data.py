@@ -1,4 +1,4 @@
-"""PO lines edited on the Master Data page are cleaned and checked before saving."""
+"""PO lines edited on the Setup page are cleaned and checked before saving."""
 from core.db.repo import po_line_rows, subtotal_gaps
 
 POS = {"PO-2026-1044"}

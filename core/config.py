@@ -1,10 +1,12 @@
 """Settings from .env and business rules from data/rules.yaml.
 
-Rules are re-read on every run so Master Data edits apply without a restart.
+Rules are re-read on every run so Setup page edits apply without a restart.
+API keys typed into the app override .env for that browser session only (never written to disk).
 """
 from __future__ import annotations
 
 import os
+import threading
 from datetime import date
 from pathlib import Path
 
@@ -19,7 +21,22 @@ RULES_PATH = DATA_DIR / "rules.yaml"
 load_dotenv(ROOT / ".env")
 
 
+SESSION_KEYS = ("GROQ_API_KEY", "GEMINI_API_KEY")
+_session = threading.local()  # Streamlit runs each browser session's script in its own thread
+
+
+def set_session_keys(keys: dict[str, str]) -> None:
+    """Keys entered in the app for the current session. Empty values fall back to .env."""
+    _session.keys = {k: v.strip() for k, v in keys.items() if k in SESSION_KEYS and v and v.strip()}
+
+
+def session_key_set(name: str) -> bool:
+    return name in getattr(_session, "keys", {})
+
+
 def env(name: str, default: str = "") -> str:
+    if session_key_set(name):
+        return _session.keys[name]
     return os.getenv(name, default).split("#")[0].strip()
 
 
