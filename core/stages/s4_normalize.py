@@ -9,7 +9,7 @@ from rapidfuzz import fuzz
 
 from core.db import repo
 from core.events import StageResult, StageStatus
-from core.models import Finding, Severity
+from core.models import Conf, FieldSource, Finding, Severity
 
 NAME = "Normalise"
 GSTIN_RE = re.compile(r"^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$")
@@ -122,8 +122,13 @@ def run(ctx) -> StageResult:
     known = [p["po_number"] for p in repo.purchase_orders()]
     n["po_ref_raw"] = inv.po_reference.value
     n["po_ref"] = record("PO reference", inv.po_reference.value, po_key(inv.po_reference.value, known))
-    n["currency"] = str(inv.currency.value or "INR").upper()
+    cur = str(inv.currency.value or "INR").upper().strip(" .")
+    n["currency"] = record("Currency", inv.currency.value, "INR" if cur in ("RS", "INR", "₹", "RUPEES") else cur)
     n["subtotal"] = record("Subtotal", inv.subtotal.value, parse_amount(inv.subtotal.value))
+    if inv.total.value in (None, "") and n["subtotal"] is not None:
+        # Unreadable total: derive it at low confidence so R02 routes to a human instead of a hard reject.
+        derived = n["subtotal"] + (0 if inv.tax.tax_inclusive else inv.tax.total)
+        inv.total = Conf(value=derived, confidence=0.5, source=FieldSource.INFERRED)
     n["total"] = record("Total", inv.total.value, parse_amount(inv.total.value))
     n["tax_total"] = round(inv.tax.total, 2)
     n["tax_inclusive"] = inv.tax.tax_inclusive

@@ -111,3 +111,14 @@ def test_required_and_confidence(make_ctx):
     ctx.extraction.total.confidence = 0.55
     f = _by_id(check_required(ctx))
     assert not f["R02_CONFIDENCE"].passed and "total" in f["R02_CONFIDENCE"].evidence["low_fields"]
+
+
+def test_rs_currency_and_missing_total_derived(make_ctx):
+    from core.models import Conf
+    from core.stages import s4_normalize
+    ctx = make_ctx()
+    ctx.extraction.currency = Conf(value="Rs.", confidence=0.9, source="text_layer")
+    ctx.extraction.total = Conf()
+    s4_normalize.run(ctx)
+    assert ctx.norm["currency"] == "INR"
+    assert ctx.norm["total"] == 118000.0 and ctx.extraction.total.confidence == 0.5

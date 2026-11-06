@@ -7,12 +7,11 @@
    capped; a misread total that is visibly correct on the page is blamed on extraction, not the vendor.
 4. **Fail soft to REVIEW.** Any processing error routes to a human. "I couldn't check this" never becomes an
    approval. Unreadable documents are rejected back to the vendor.
-5. **Free-tier LLMs with a fallback chain and a cache.** Gemini (vision) → Groq (text) → Ollama (local) →
+5. **Free-tier LLMs with a fallback chain and a cache.** Groq (text + vision) → Gemini →
    OCR. Model names live in `.env`. Cached extractions keep a live demo alive without Wi-Fi or quota and are
    labelled "cached" in the UI.
-6. **An offline `sample_truth` provider for the bundled samples.** It returns the generator's ground truth
-   only for files whose SHA-256 it knows, so tests and keyless demos run deterministically. It is labelled
-   as such everywhere and cannot read other documents.
+6. **Tests run offline.** A test-only fake provider (`tests/conftest.py`) returns the generator's ground
+   truth for the bundled samples, so the suite is deterministic and needs no API key.
 7. **Explanations are guarded.** The LLM sees only findings, and its output is rejected if it introduces any
    number not in those findings; the template explanation is always available.
 8. **SQLite + Streamlit.** Right for a prototype. The path to production is Postgres, an API (FastAPI) and a

@@ -28,7 +28,7 @@ def db_path() -> Path:
 
 
 def provider_order() -> list[str]:
-    return [p.strip() for p in env("LLM_PROVIDER_ORDER", "gemini,groq,ollama,sample_truth").split(",") if p.strip()]
+    return [p.strip() for p in env("LLM_PROVIDER_ORDER", "groq,gemini").split(",") if p.strip()]
 
 
 def flag(name: str, default: bool = True) -> bool:

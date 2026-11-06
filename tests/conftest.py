@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from pathlib import Path
@@ -15,6 +16,27 @@ from datetime import date  # noqa: E402
 from core import config  # noqa: E402
 from core.context import RunContext  # noqa: E402
 from core.models import ExtractedInvoice, LineItem, TaxBreakdown  # noqa: E402
+from core.llm import router  # noqa: E402
+from core.llm.base import Provider, ProviderError  # noqa: E402
+
+TRUTH_DIR = config.SAMPLES_DIR / "truth"
+
+
+class SampleTruthProvider(Provider):
+    """Test-only fake: returns the generator's ground truth for the bundled sample PDFs."""
+    name, supports_vision, model = "sample_truth", True, "ground-truth"
+
+    def extract(self, payload):
+        name = json.loads((TRUTH_DIR / "index.json").read_text()).get(payload.file_hash)
+        if not name:
+            raise ProviderError("not a bundled sample")
+        return ExtractedInvoice.model_validate_json((TRUTH_DIR / name).read_text())
+
+    def text(self, prompt):
+        raise ProviderError("sample_truth cannot write explanations")
+
+
+router.PROVIDERS["sample_truth"] = SampleTruthProvider
 
 TODAY = date(2026, 11, 6)
 

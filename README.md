@@ -21,9 +21,8 @@ python samples/generate_samples.py
 streamlit run Home.py
 ```
 
-No API keys? The bundled samples still run end to end through the offline `sample_truth` provider
-(it returns the generator's ground truth for those exact files and cannot read anything else). Real
-uploads need Gemini, Groq (text PDFs) or a local Ollama model.
+Add `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`) to `.env`. Groq reads text PDFs with
+`GROQ_MODEL` and scanned PDFs with `GROQ_VISION_MODEL`; Gemini is the fallback.
 
 Terminal only:
 
@@ -45,7 +44,7 @@ pytest                                               # 119 tests; add RUN_LIVE=1
   pricing (a false alarm it must not raise), scanned invoice with no PO and an unreadable total.
 - **UI**: live run view, dashboard (KPIs, charts, PO utilisation, runs table), review queue with
   comment-required overrides, run replay, editable master data and rule thresholds, "Reset demo data".
-- **Resilience**: provider fallback chain (Gemini → Groq → Ollama → OCR), disk cache for demo safety,
+- **Resilience**: provider fallback chain (Groq → Gemini → OCR), disk cache for demo safety,
   fail-soft to REVIEW, template explanations with a numbers guardrail when the LLM is unavailable.
 
 ## Docs

@@ -12,8 +12,8 @@
         ▼                           ▼                              ▼
  ┌──────────────┐          ┌──────────────────┐           ┌──────────────────────┐
  │ Streamlit UI │          │ SQLite: runs,    │           │ LLM layer            │
- │ live stage   │          │ events, findings,│           │ Gemini → Groq →      │
- │ cards        │          │ ledger, masters  │           │ Ollama → sample_truth│
+ │ live stage   │          │ events, findings,│           │ Groq → Gemini        │
+ │ cards        │          │ ledger, masters  │           │                      │
  └──────────────┘          └──────────────────┘           │ + OCR + disk cache   │
                                                           └──────────────────────┘
 ```

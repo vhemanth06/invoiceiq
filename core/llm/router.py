@@ -11,12 +11,9 @@ from core.llm import cache
 from core.llm.base import Payload, ProviderError
 from core.llm.gemini_client import GeminiProvider
 from core.llm.groq_client import GroqProvider
-from core.llm.ollama_client import OllamaProvider
-from core.llm.sample_truth import SampleTruthProvider
 from core.models import ExtractedInvoice, FieldSource
 
-PROVIDERS = {"gemini": GeminiProvider, "groq": GroqProvider, "ollama": OllamaProvider,
-             "sample_truth": SampleTruthProvider}
+PROVIDERS = {"groq": GroqProvider, "gemini": GeminiProvider}
 
 
 class ExtractionFailed(Exception):
@@ -37,7 +34,7 @@ def _try_chain(payload: Payload, attempts: list[str], use_cache: bool) -> tuple[
         if not prov.available():
             attempts.append(f"{prov.name}: not configured")
             continue
-        cacheable = use_cache and prov.name != "sample_truth"
+        cacheable = use_cache
         if cacheable and (hit := cache.get(payload.file_hash + payload.route, prov.name, prov.model)):
             attempts.append(f"{prov.name}: cache hit")
             return ExtractedInvoice.model_validate(hit), f"{prov.name} (cached)"
@@ -89,7 +86,7 @@ def extract(payload: Payload, use_cache: bool | None = None) -> tuple[ExtractedI
 def explain(prompt: str) -> tuple[str, str] | None:
     """Free-text completion for explanations. Returns (text, provider) or None if nobody can."""
     for prov in _providers():
-        if prov.name == "sample_truth" or not prov.available():
+        if not prov.available():
             continue
         try:
             return prov.text(prompt), prov.name

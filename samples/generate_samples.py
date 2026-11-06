@@ -4,7 +4,7 @@ Four visual layouts (tally, table, letter, minimal) plus "scanned" variants: the
 rendered to an image, rotated, blurred, noised, stained, and saved back as an image-only PDF.
 
 For every sample we also write a ground-truth extraction (samples/truth/<name>.json) and an
-index keyed by the PDF's SHA-256. The offline `sample_truth` provider uses it so the whole
+index keyed by the PDF's SHA-256. The test-only `sample_truth` fake in tests/conftest.py uses it so the whole
 pipeline can run (and be tested) without API keys. It only ever answers for these exact files.
 
 Run:  python samples/generate_samples.py
