@@ -1,49 +1,49 @@
 # Expected outcomes, in the order they must run on a freshly reset DB (the ledger builds up).
 - file: 01_happy_acme_inv1042.pdf
-  label: Happy path - Acme INV-1042
+  label: "Clean invoice that fully matches its PO"
   expected: APPROVE
 - file: 02_split_brightline_m1.pdf
-  label: "Edge 1: split invoicing, milestone 1"
+  label: "First of three milestone invoices on one PO"
   expected: APPROVE
 - file: 03_split_brightline_m2.pdf
-  label: "Edge 1: split invoicing, milestone 2"
+  label: "Second milestone invoice, PO still within budget"
   expected: APPROVE
 - file: 04_split_brightline_m3.pdf
-  label: "Edge 1: split invoicing, milestone 3 (over-bills PO)"
+  label: "Third milestone invoice pushes total billing 8.4% over the PO"
   expected: REVIEW
   must_include_rules: [R16_CUMULATIVE_PO]
 - file: 05_duplicate_acme_inv1042R_scanned.pdf
-  label: "Edge 2: disguised duplicate INV/1042-R (scanned)"
+  label: "Rescanned resubmission of an already-approved invoice (INV/1042-R)"
   expected: REJECT
   must_include_rules: [R19_EXACT_DUPLICATE]
 - file: 06_tax_inclusive_deccan.pdf
-  label: "Edge 3: tax-inclusive pricing"
+  label: "Prices include GST; looks 12% over the PO but is not"
   expected: APPROVE
   must_include_rules: [R21_TAX_RECONCILED]
 - file: 07_scanned_nopo_nimbus.pdf
-  label: "Edge 4: scanned, no PO, blurred total"
+  label: "Scanned invoice with no PO number and a stained total"
   expected: REVIEW
   must_include_rules: [R02_CONFIDENCE, R12_PO_INFERRED]
 - file: 08_bank_change_acme.pdf
-  label: "Bonus: bank account changed"
+  label: "Vendor bank account differs from the one on file"
   expected: REVIEW
   must_include_rules: [R11_BANK_MATCH]
 - file: 09_unapproved_orbit.pdf
-  label: "Bonus: unapproved vendor"
+  label: "Vendor not yet approved (KYC pending)"
   expected: REJECT
   must_include_rules: [R09_VENDOR_APPROVED]
 # 10-11 were added by hand; `golden: false` keeps them out of the offline golden tests
 # (no ground-truth file for 10-11).
 - file: 10_foreign_currency_acme_usd.pdf
-  label: "Foreign currency: USD invoice"
+  label: "Invoice billed in US dollars against an INR PO"
   expected: REVIEW
   must_include_rules: [R24_CURRENCY]
   golden: false
 - file: 11_scanned_clean_nimbus_po1075.pdf
-  label: "Clean scan with PO"
+  label: "Clear scanned invoice that fully matches its PO"
   expected: APPROVE
   golden: false
 - file: 12_unknown_po_deccan.pdf
-  label: "Unknown PO: PO-2027-1900 is not in the PO list"
+  label: "Quotes a PO number that does not exist"
   expected: REVIEW
   must_include_rules: [R12_PO_MISSING]
