@@ -1,0 +1,72 @@
+{
+  "vendor_name": {
+    "value": "Acme Industrial Supplies Pvt Ltd",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "vendor_gstin": {
+    "value": "36AABCA1234F1Z5",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_number": {
+    "value": "INV-1088",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_date": {
+    "value": "20/10/2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "due_date": {
+    "value": "19/11/2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "po_reference": {
+    "value": "PO-2026-1044",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "currency": {
+    "value": "INR",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "line_items": [
+    {
+      "description": "Bearing kit SKF 6205",
+      "quantity": 50,
+      "unit_price": 1000,
+      "amount": 50000,
+      "hsn_sac": "8482",
+      "is_bundled": false
+    }
+  ],
+  "subtotal": {
+    "value": "50,000.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "tax": {
+    "cgst": 4500.0,
+    "sgst": 4500.0,
+    "igst": 0,
+    "other": 0,
+    "rate_percent": 18,
+    "tax_inclusive": false
+  },
+  "total": {
+    "value": "Rs. 59,000.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "bank_account_last4": {
+    "value": "9931",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "document_type": "invoice",
+  "notes": "Please note our NEW bank account details below"
+}

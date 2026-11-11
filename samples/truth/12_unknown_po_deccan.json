@@ -1,0 +1,72 @@
+{
+  "vendor_name": {
+    "value": "Deccan Packaging Co.",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "vendor_gstin": {
+    "value": "36AAFCD9012M1Z8",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_number": {
+    "value": "DPC-5600",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "invoice_date": {
+    "value": "11/11/2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "due_date": {
+    "value": "11/12/2026",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "po_reference": {
+    "value": "PO-2027-1900",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "currency": {
+    "value": "INR",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "line_items": [
+    {
+      "description": "something",
+      "quantity": 1,
+      "unit_price": 120000,
+      "amount": 120000,
+      "hsn_sac": "4819",
+      "is_bundled": false
+    }
+  ],
+  "subtotal": {
+    "value": "1,20,000.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "tax": {
+    "cgst": 7200.0,
+    "sgst": 7200.0,
+    "igst": 0,
+    "other": 0,
+    "rate_percent": 12,
+    "tax_inclusive": false
+  },
+  "total": {
+    "value": "Rs. 1,34,400.00",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "bank_account_last4": {
+    "value": "3302",
+    "confidence": 0.97,
+    "source": "text_layer"
+  },
+  "document_type": "invoice",
+  "notes": null
+}

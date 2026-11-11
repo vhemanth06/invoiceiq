@@ -1,0 +1,72 @@
+{
+  "vendor_name": {
+    "value": "Nimbus Cloud Hosting",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "vendor_gstin": {
+    "value": "07AAICN7788Q1Z4",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "invoice_number": {
+    "value": "NCH-2026-1107",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "invoice_date": {
+    "value": "01/11/2026",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "due_date": {
+    "value": null,
+    "confidence": 0,
+    "source": "missing"
+  },
+  "po_reference": {
+    "value": null,
+    "confidence": 0,
+    "source": "missing"
+  },
+  "currency": {
+    "value": "INR",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "line_items": [
+    {
+      "description": "Hosting services - Oct 2026",
+      "quantity": 1,
+      "unit_price": 60000,
+      "amount": 60000,
+      "hsn_sac": "998315",
+      "is_bundled": false
+    }
+  ],
+  "subtotal": {
+    "value": "60,000.00",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "tax": {
+    "cgst": 0,
+    "sgst": 0,
+    "igst": 10800.0,
+    "other": 0,
+    "rate_percent": 18,
+    "tax_inclusive": false
+  },
+  "total": {
+    "value": "Rs. 70,800.00",
+    "confidence": 0.55,
+    "source": "vision"
+  },
+  "bank_account_last4": {
+    "value": "6650",
+    "confidence": 0.9,
+    "source": "vision"
+  },
+  "document_type": "invoice",
+  "notes": null
+}
