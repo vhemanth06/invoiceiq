@@ -16,12 +16,12 @@ controls()
 st.title("Setup")
 
 with st.container(border=True):
-    a, b = st.columns([3, 1])
+    a, b = st.columns([5, 1], vertical_alignment="center")
     a.write("**Reset demo data** reseeds vendors and POs from CSV and clears all runs, findings and the invoice "
             "ledger.")
-    if b.button("Reset demo data", type="primary"):
+    if b.button("Reset demo data", type="primary", width="stretch"):
         seed()
-        st.success("Demo data reset.")
+        st.toast("Demo data reset.")
 
 tab_v, tab_p, tab_r = st.tabs(["Vendors", "Purchase orders", "Rules"])
 with tab_v:
