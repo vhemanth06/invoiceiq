@@ -45,8 +45,14 @@ def seed(reset_runs: bool = True) -> None:
 
 
 def ensure_seeded() -> None:
-    """Startup hook: seed master data if the DB is empty (e.g. fresh cloud deploy)."""
-    with Session(get_engine()) as s:
+    """Startup hook: seed master data if the DB is empty (e.g. fresh cloud deploy).
+
+    Tables are (re)created first: a cloud redeploy can delete the DB file while the app keeps running,
+    and new connections then open an empty file. create_all only adds missing tables, so this is cheap.
+    """
+    engine = get_engine()
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as s:
         if s.get(Vendor, "V001") is None:
             seed(reset_runs=False)
 

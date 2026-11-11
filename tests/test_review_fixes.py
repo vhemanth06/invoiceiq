@@ -115,3 +115,18 @@ def test_run_detail_handles_unfinished_run():
     from ui.components import decision_complete
     assert not decision_complete({"decision": {}})
     assert decision_complete({"decision": {"outcome": "APPROVE"}})
+
+
+def test_db_file_vanishing_under_running_app_is_recovered(fresh_db):
+    """Cloud redeploys can delete data/invoiceiq.db while the app keeps its engine: recreate tables + reseed."""
+    import os
+
+    from core import config
+    from core.db import repo
+    from core.db.schema import get_engine
+    from core.db.seed import ensure_seeded
+    ensure_seeded()
+    os.remove(config.db_path())
+    get_engine().dispose()  # next connection opens a brand-new empty file
+    ensure_seeded()
+    assert any(v["vendor_id"] == "V001" for v in repo.vendors())
