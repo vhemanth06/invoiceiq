@@ -1,7 +1,7 @@
 .venv/
 .env
 __pycache__/
-# data/invoiceiq.db
+data/invoiceiq.db
 data/uploads/
 data/llm_cache/
 pip.log
