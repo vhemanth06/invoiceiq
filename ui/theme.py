@@ -23,8 +23,6 @@ CSS = """
 .iq-pill {display:inline-block; padding:.15rem .6rem; margin:.15rem; border-radius:999px; font-size:.82rem;
           border:1px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent);}
 .iq-badge {padding:.1rem .5rem; border-radius:6px; color:white; background:var(--c); font-weight:700; font-size:.8rem;}
-.iq-flow {display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; margin:.6rem 0 1rem;}
-.iq-flow span.st {padding:.35rem .7rem; border-radius:8px; border:1px solid #64748b55; font-weight:600;}
 </style>
 """
 

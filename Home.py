@@ -3,7 +3,6 @@ import streamlit as st
 
 from core.db import repo
 from core.db.seed import ensure_seeded
-from core.pipeline import STAGE_NAMES
 from ui import theme
 from ui.formatting import inr
 from ui.sidebar import controls
@@ -15,8 +14,6 @@ controls()
 
 st.title("InvoiceIQ")
 st.markdown("#### From invoice PDF to a reasoned, auditable **Approve / Review / Reject** decision.")
-st.markdown('<div class="iq-flow">' + " → ".join(f'<span class="st">{i} {n}</span>' for i, n in
-                                                 enumerate(STAGE_NAMES, 1)) + "</div>", unsafe_allow_html=True)
 
 runs = repo.list_runs()
 c = st.columns(4)
