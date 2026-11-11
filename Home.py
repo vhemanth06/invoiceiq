@@ -33,5 +33,5 @@ with l:
     st.page_link("pages/1_Process_Invoice.py", label="Process invoice")
     st.page_link("pages/2_Dashboard.py", label="Dashboard and review queue")
 with r:
-    st.page_link("pages/3_Audit_Trail.py", label="Replay any run")
+    st.page_link("pages/3_Audit_Trail.py", label="Audit trail")
     st.page_link("pages/4_Setup.py", label="Vendors, POs and rule thresholds")
