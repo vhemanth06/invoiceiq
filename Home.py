@@ -15,8 +15,6 @@ controls()
 
 st.title("InvoiceIQ")
 st.markdown("#### From invoice PDF to a reasoned, auditable **Approve / Review / Reject** decision.")
-st.write("Upload a vendor invoice (digital or scanned). An LLM reads it; deterministic procurement rules decide. "
-         "Every stage is visible live and stored for replay.")
 st.markdown('<div class="iq-flow">' + " → ".join(f'<span class="st">{i} {n}</span>' for i, n in
                                                  enumerate(STAGE_NAMES, 1)) + "</div>", unsafe_allow_html=True)
 
@@ -32,7 +30,7 @@ c[3].metric("Rejected", sum(r["outcome"] == "REJECT" for r in done))
 st.divider()
 l, r = st.columns(2)
 with l:
-    st.page_link("pages/1_Process_Invoice.py", label="Process an invoice (live run view)")
+    st.page_link("pages/1_Process_Invoice.py", label="Process invoice")
     st.page_link("pages/2_Dashboard.py", label="Dashboard and review queue")
 with r:
     st.page_link("pages/3_Audit_Trail.py", label="Replay any run")
