@@ -130,3 +130,28 @@ def test_db_file_vanishing_under_running_app_is_recovered(fresh_db):
     get_engine().dispose()  # next connection opens a brand-new empty file
     ensure_seeded()
     assert any(v["vendor_id"] == "V001" for v in repo.vendors())
+
+
+def test_concurrent_page_loads_after_db_wipe_do_not_crash(fresh_db):
+    """Several Streamlit sessions (threads) hitting an empty DB at once must not race on CREATE TABLE."""
+    import os
+    import threading
+
+    from core import config
+    from core.db.schema import get_engine
+    from core.db.seed import ensure_seeded
+    ensure_seeded()
+    errors = []
+    for _ in range(3):
+        os.remove(config.db_path())
+        get_engine().dispose()
+
+        def load():
+            try:
+                ensure_seeded()
+            except Exception as e:  # noqa: BLE001 - any error is a failure here
+                errors.append(e)
+        threads = [threading.Thread(target=load) for _ in range(8)]
+        [t.start() for t in threads]
+        [t.join() for t in threads]
+    assert not errors, errors[0]

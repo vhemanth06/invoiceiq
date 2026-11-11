@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import threading
 from datetime import date
 
 from sqlmodel import Session, SQLModel, delete
@@ -10,6 +11,8 @@ from core.config import DATA_DIR
 from core.db.schema import POLine, PurchaseOrder, Vendor, get_engine
 
 _TRUE = ("true", "1", "yes")
+# Streamlit sessions are threads of one process: only one may create/drop tables or reseed at a time.
+_DDL_LOCK = threading.RLock()
 
 
 def _rows(name: str) -> list[dict]:
@@ -19,6 +22,11 @@ def _rows(name: str) -> list[dict]:
 
 def seed(reset_runs: bool = True) -> None:
     """Reseed master data; with reset_runs also clear runs, events, findings and the ledger."""
+    with _DDL_LOCK:
+        _seed(reset_runs)
+
+
+def _seed(reset_runs: bool) -> None:
     engine = get_engine()
     tables = [Vendor, PurchaseOrder, POLine]
     if reset_runs:
@@ -51,10 +59,11 @@ def ensure_seeded() -> None:
     and new connections then open an empty file. create_all only adds missing tables, so this is cheap.
     """
     engine = get_engine()
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as s:
-        if s.get(Vendor, "V001") is None:
-            seed(reset_runs=False)
+    with _DDL_LOCK:
+        SQLModel.metadata.create_all(engine)
+        with Session(engine) as s:
+            if s.get(Vendor, "V001") is None:
+                _seed(reset_runs=False)
 
 
 if __name__ == "__main__":
