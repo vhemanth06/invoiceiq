@@ -21,7 +21,7 @@ RULES_PATH = DATA_DIR / "rules.yaml"
 load_dotenv(ROOT / ".env")
 
 
-SESSION_KEYS = ("GROQ_API_KEY", "GEMINI_API_KEY")
+SESSION_KEYS = ("GROQ_API_KEY",)
 _session = threading.local()  # Streamlit runs each browser session's script in its own thread
 
 
@@ -45,7 +45,7 @@ def db_path() -> Path:
 
 
 def provider_order() -> list[str]:
-    return [p.strip() for p in env("LLM_PROVIDER_ORDER", "groq,gemini").split(",") if p.strip()]
+    return [p.strip() for p in env("LLM_PROVIDER_ORDER", "groq").split(",") if p.strip()]
 
 
 def flag(name: str, default: bool = True) -> bool:

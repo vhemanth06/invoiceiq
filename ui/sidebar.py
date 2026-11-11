@@ -6,7 +6,7 @@ import streamlit as st
 from core import config
 from core.llm.router import PROVIDERS
 
-KEY_FIELDS = {"GROQ_API_KEY": "Groq API key", "GEMINI_API_KEY": "Gemini API key"}
+KEY_FIELDS = {"GROQ_API_KEY": "Groq API key"}
 
 
 def _keep(name: str) -> None:
@@ -36,19 +36,10 @@ def controls() -> None:
         st.subheader("LLM settings")
         api_keys()
         avail = {n: PROVIDERS[n]().available() for n in PROVIDERS}
-
-        def label(n: str) -> str:
-            if not avail[n]:
-                return f"{n} (not set)"
-            return f"{n} (ready · app key)" if config.session_key_set(f"{n.upper()}_API_KEY") else f"{n} (ready)"
-
-        order = st.multiselect("Provider order", list(PROVIDERS), default=config.provider_order(),
-                               format_func=label, help="not set = no API key in .env or in the API keys box")
-        os.environ["LLM_PROVIDER_ORDER"] = ",".join(order)
         os.environ["USE_LLM_CACHE"] = str(st.toggle("Use LLM cache", value=config.flag("USE_LLM_CACHE"),
                                                      help="Replay cached extractions; turn off to force a live call"))
         os.environ["USE_LLM_EXPLANATIONS"] = str(st.toggle("LLM-written explanations",
                                                            value=config.flag("USE_LLM_EXPLANATIONS"),
                                                            help="Off = deterministic template explanations"))
         if not any(avail.values()):
-            st.caption("No LLM configured: paste a Groq or Gemini key above, or add one to .env.")
+            st.caption("No LLM configured: paste a Groq key above, or add one to .env.")

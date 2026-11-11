@@ -5,9 +5,9 @@ cache by running all samples once with a live provider; keep a terminal with `py
 
 1. **Frame it (1 min).** "AP must never pay the wrong amount, the wrong vendor, or the same invoice twice,
    without slowing down the 80% that are fine. The LLM reads, deterministic rules decide, every step is visible."
-2. **Happy path (1 min).** Process Invoice → sample "Happy path – Acme INV-1042" → eight stages go green →
+2. **Happy path (1 min).** Process Invoice → upload `samples/invoices/01_happy_acme_inv1042.pdf` → eight stages go green →
    APPROVE. Expand Extract (provider, confidence) and Match PO.
-3. **Edge 3, tax-inclusive (1½ min).** Deccan sample → APPROVE with the Info "Tax-inclusive pricing reconciled" pill.
+3. **Edge 3, tax-inclusive (1½ min).** Upload `06_tax_inclusive_deccan.pdf` → APPROVE with the Info "Tax-inclusive pricing reconciled" pill.
 4. **Edge 1, split invoices (2 min).** Run the three BrightLine milestones; the third is REVIEW (+8.4%).
    Dashboard → PO utilisation: PO-2026-1052 is red.
 5. **Edge 2, disguised duplicate (1½ min).** `INV/1042-R` scan → REJECT. Findings tab → "Open original invoice run".

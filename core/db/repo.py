@@ -19,14 +19,19 @@ def _dump(obj) -> str:
 
 
 # ---- master data ----------------------------------------------------------
+def _row(obj) -> dict:
+    """Columns in schema order; model_dump() follows SQLAlchemy load order, which varies between processes."""
+    return {k: getattr(obj, k) for k in type(obj).model_fields}
+
+
 def vendors() -> list[dict]:
     with _s() as s:
-        return [v.model_dump() for v in s.exec(select(Vendor))]
+        return [_row(v) for v in s.exec(select(Vendor).order_by(Vendor.vendor_id))]
 
 
 def purchase_orders() -> list[dict]:
     with _s() as s:
-        return [p.model_dump() for p in s.exec(select(PurchaseOrder))]
+        return [_row(p) for p in s.exec(select(PurchaseOrder).order_by(PurchaseOrder.po_number))]
 
 
 def po_lines(po_number: str | None = None) -> list[dict]:
@@ -34,7 +39,7 @@ def po_lines(po_number: str | None = None) -> list[dict]:
         q = select(POLine).order_by(POLine.po_number, POLine.line_no)
         if po_number:
             q = q.where(POLine.po_number == po_number)
-        return [l.model_dump() for l in s.exec(q)]
+        return [_row(l) for l in s.exec(q)]
 
 
 def _blank(v) -> bool:

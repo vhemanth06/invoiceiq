@@ -3,7 +3,6 @@ plotly>=5.24
 pydantic>=2.8
 sqlmodel>=0.0.22
 pymupdf>=1.24
-google-genai>=1.0
 groq>=0.11
 rapidfuzz>=3.9
 pyyaml>=6.0

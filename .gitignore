@@ -6,3 +6,4 @@ data/uploads/
 data/llm_cache/
 pip.log
 .pytest_cache/
+.VSCodeCounter/

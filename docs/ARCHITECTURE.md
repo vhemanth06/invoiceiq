@@ -12,7 +12,7 @@
         ▼                           ▼                              ▼
  ┌──────────────┐          ┌──────────────────┐           ┌──────────────────────┐
  │ Streamlit UI │          │ SQLite: runs,    │           │ LLM layer            │
- │ live stage   │          │ events, findings,│           │ Groq → Gemini        │
+ │ live stage   │          │ events, findings,│           │ Groq → OCR           │
  │ cards        │          │ ledger, masters  │           │                      │
  └──────────────┘          └──────────────────┘           │ + OCR + disk cache   │
                                                           └──────────────────────┘

@@ -1,6 +1,7 @@
 # Edge cases
 
-Run them with **Process Invoice → Reset & run all samples in order** or `python cli.py --all-samples --reset`.
+Run them with `python cli.py --all-samples --reset`, or reset demo data in Setup and upload them in order on the
+Process Invoice page. Expected decisions: [SAMPLE_DECISIONS.md](SAMPLE_DECISIONS.md).
 Order matters: cases 1 and 2 depend on earlier runs in the ledger.
 
 ## 1. Split invoicing that silently over-bills a PO
@@ -51,6 +52,4 @@ Order matters: cases 1 and 2 depend on earlier runs in the ledger.
 |---|---|---|
 | `08_bank_change_acme.pdf` | Bank account ending 9931 vs 4521 on file (payment-diversion fraud pattern) | REVIEW (R11) |
 | `09_unapproved_orbit.pdf` | Vendor with KYC pending, PO reference does not exist | REJECT (R09) |
-| `10_bundled_amc.pdf` | Single lump-sum "AMC as per agreement" line, no qty/rate | APPROVE |
-| `11_credit_note_acme.pdf` | Credit note sent to AP | REVIEW (R23), kept out of the ledger |
 | `01_happy_acme_inv1042.pdf` | Clean invoice, ambiguous date `05/10/2026` read as DD/MM | APPROVE |

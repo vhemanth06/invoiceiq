@@ -95,14 +95,10 @@ SAMPLES: list[dict] = [
          number="OOS/778", date="25-Oct-2026", due="24-Nov-2026", po="PO-2026-1099", bank="1190",
          lines=[("Ergonomic office chairs", 10, 8500, "9401")],
          gst=("inter", 18)),
-    dict(file="10_bundled_amc.pdf", layout="table", vendor="blit", title="INVOICE",
-         number="BLIT/2026/095", date="12 Oct 2026", due="26 Nov 2026", po="PO-2026-1080", bank="8870",
-         lines=[("Annual AMC - IT infrastructure (lump sum, services as per agreement)", None, 120000, "998713")],
-         gst=("inter", 18)),
-    dict(file="11_credit_note_acme.pdf", layout="letter", vendor="acme", title="CREDIT NOTE",
-         number="CN-2026-014", date="30/10/2026", due=None, po="PO-2026-1041", bank="4521",
-         lines=[("Return of damaged safety gloves against INV-1042", 5, 1500, "4015")],
-         gst=("intra", 18), note="Credit note against invoice INV-1042", doc_type="credit_note"),
+    dict(file="12_unknown_po_deccan.pdf", layout="letter", vendor="deccan", title="INVOICE",
+         number="DPC-5600", date="11/11/2026", due="11/12/2026", po="PO-2027-1900", bank="3302",
+         lines=[("something", 1, 120000, "4819")],
+         gst=("intra", 12)),
 ]
 
 

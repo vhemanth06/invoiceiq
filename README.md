@@ -15,21 +15,21 @@ with a human review queue, and replays any past run.
 ```bash
 python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env        # optional: add free Gemini / Groq keys
+cp .env.example .env        # add your free Groq key
 python -m core.db.seed      # load vendors & POs
 python samples/generate_samples.py
 streamlit run Home.py
 ```
 
-Add `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`) to `.env`. Groq reads text PDFs with
-`GROQ_MODEL` and scanned PDFs with `GROQ_VISION_MODEL`; Gemini is the fallback.
+Add `GROQ_API_KEY` to `.env` (or paste it in the app sidebar). Groq reads text PDFs with `GROQ_MODEL`
+and scanned PDFs with `GROQ_VISION_MODEL`; Tesseract OCR is the last resort if installed.
 
 Terminal only:
 
 ```bash
 python cli.py --all-samples --reset                  # run the manifest in order, check expectations
 python cli.py samples/invoices/07_scanned_nopo_nimbus.pdf
-pytest                                               # 119 tests; add RUN_LIVE=1 for a real Gemini call
+pytest                                               # add RUN_LIVE=1 for a real Groq call
 ```
 
 ## Features
@@ -44,7 +44,7 @@ pytest                                               # 119 tests; add RUN_LIVE=1
   pricing (a false alarm it must not raise), scanned invoice with no PO and an unreadable total.
 - **UI**: live run view, dashboard (KPIs, charts, PO utilisation, runs table), review queue with
   comment-required overrides, run replay, editable master data and rule thresholds, "Reset demo data".
-- **Resilience**: provider fallback chain (Groq → Gemini → OCR), disk cache for demo safety,
+- **Resilience**: provider fallback chain (Groq → OCR), disk cache for demo safety,
   fail-soft to REVIEW, template explanations with a numbers guardrail when the LLM is unavailable.
 
 ## Docs
@@ -55,6 +55,7 @@ pytest                                               # 119 tests; add RUN_LIVE=1
 | [PIPELINE](docs/PIPELINE.md) | Every stage: inputs, outputs, failure behaviour |
 | [RULES](docs/RULES.md) | Rule catalogue, thresholds, decision matrix |
 | [EDGE_CASES](docs/EDGE_CASES.md) | The four edge cases and the bonus scenarios |
+| [SAMPLE_DECISIONS](docs/SAMPLE_DECISIONS.md) | Expected decision for every bundled sample |
 | [DESIGN_DECISIONS](docs/DESIGN_DECISIONS.md) | Why it is built this way |
 | [DEMO_SCRIPT](docs/DEMO_SCRIPT.md) | 10-minute walkthrough |
 

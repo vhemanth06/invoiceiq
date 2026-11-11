@@ -32,10 +32,18 @@
   label: "Bonus: unapproved vendor"
   expected: REJECT
   must_include_rules: [R09_VENDOR_APPROVED]
-- file: 10_bundled_amc.pdf
-  label: "Happy path - bundled lump-sum AMC"
-  expected: APPROVE
-- file: 11_credit_note_acme.pdf
-  label: "Bonus: credit note sent as invoice"
+# 10-11 were added by hand; `golden: false` keeps them out of the offline golden tests
+# (no ground-truth file for 10-11).
+- file: 10_foreign_currency_acme_usd.pdf
+  label: "Foreign currency: USD invoice"
   expected: REVIEW
-  must_include_rules: [R23_DOCUMENT_TYPE]
+  must_include_rules: [R24_CURRENCY]
+  golden: false
+- file: 11_scanned_clean_nimbus_po1075.pdf
+  label: "Clean scan with PO"
+  expected: APPROVE
+  golden: false
+- file: 12_unknown_po_deccan.pdf
+  label: "Unknown PO: PO-2027-1900 is not in the PO list"
+  expected: REVIEW
+  must_include_rules: [R12_PO_MISSING]

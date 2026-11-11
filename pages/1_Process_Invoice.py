@@ -1,4 +1,4 @@
-"""Process Invoice: upload or pick a sample, then watch the eight stages run live."""
+"""Process Invoice: upload a PDF and watch the eight stages run live, or run the sample set as a demo."""
 import streamlit as st
 import yaml
 
@@ -16,20 +16,8 @@ ensure_seeded()
 controls()
 st.title("Process Invoice")
 
-MANIFEST = yaml.safe_load((config.SAMPLES_DIR / "manifest.yaml").read_text())
-SAMPLE_DIR = config.SAMPLES_DIR / "invoices"
-
-up_col, sample_col = st.columns([1, 1])
-with up_col:
-    upload = st.file_uploader("Drag & drop an invoice PDF", type=["pdf"])
-    run_upload = st.button("Run", type="primary", disabled=upload is None)
-with sample_col:
-    labels = {m["label"] + f"  (expect {m['expected']})": m for m in MANIFEST}
-    choice = st.selectbox("…or pick a sample", list(labels))
-    s1, s2 = st.columns(2)
-    run_sample = s1.button("Run sample")
-    run_all = s2.button("Reset & run all samples in order", help="Reseeds the DB (clears history) first; the "
-                                                                "split-invoice and duplicate cases need this order")
+upload = st.file_uploader("Drag & drop an invoice PDF", type=["pdf"])
+run_upload = st.button("Run", type="primary", disabled=upload is None)
 
 
 def live_run(file_bytes: bytes, name: str, source: str) -> str:
@@ -62,22 +50,38 @@ def live_run(file_bytes: bytes, name: str, source: str) -> str:
 
 if run_upload and upload:
     st.session_state["last_runs"] = [live_run(upload.getvalue(), upload.name, "upload")]
-elif run_sample:
-    m = labels[choice]
-    st.session_state["last_runs"] = [live_run((SAMPLE_DIR / m["file"]).read_bytes(), m["file"], "sample")]
-elif run_all:
+
+st.divider()
+st.subheader("Demo: run the sample invoices")
+MANIFEST = yaml.safe_load((config.SAMPLES_DIR / "manifest.yaml").read_text())
+SAMPLE_DIR = config.SAMPLES_DIR / "invoices"
+results = st.session_state.get("sample_results", {})
+st.dataframe([{"#": i, "sample": m["file"], "scenario": m["label"], "expected": m["expected"],
+               "got": results.get(m["file"], {}).get("got", ""),
+               "match": results.get(m["file"], {}).get("match", "")} for i, m in enumerate(MANIFEST, 1)],
+             hide_index=True, width="stretch")
+sure = st.checkbox("Reset demo data first (deletes all runs, findings and the invoice ledger)")
+if st.button("Run all samples", type="primary", disabled=not sure):
     seed()
-    ids, bar = [], st.progress(0.0, "Running samples…")
+    results, bar = {}, st.progress(0.0)
     for i, m in enumerate(MANIFEST):
-        with st.container(border=True):
-            ids.append(live_run((SAMPLE_DIR / m["file"]).read_bytes(), m["file"], "sample"))
-        bar.progress((i + 1) / len(MANIFEST), f"{i + 1}/{len(MANIFEST)} samples")
-    st.session_state["last_runs"] = ids
-    rows = [(m["file"], m["expected"], repo.get_run(r)["outcome"]) for m, r in zip(MANIFEST, ids)]
-    ok = sum(e == g for _, e, g in rows)
-    (st.success if ok == len(rows) else st.error)(f"{ok}/{len(rows)} samples matched their expected decision")
-    st.dataframe([{"file": f, "expected": e, "got": g, "match": "yes" if e == g else "NO"} for f, e, g in rows],
-                 hide_index=True)
+        bar.progress(i / len(MANIFEST), f"Running {m['file']} ({i + 1}/{len(MANIFEST)})")
+        path = SAMPLE_DIR / m["file"]
+        if not path.exists():
+            results[m["file"]] = {"got": "missing file", "match": "NO"}
+            continue
+        ctx = run_pipeline(path.read_bytes(), m["file"], "sample")
+        got = ctx.decision.outcome.value
+        results[m["file"]] = {"got": got, "match": "yes" if got == m["expected"] else "NO", "run_id": ctx.run_id}
+    bar.progress(1.0, "Done")
+    st.session_state["sample_results"] = results
+    st.session_state["last_runs"] = []
+    st.rerun()
+if results:
+    ok = sum(r["match"] == "yes" for r in results.values())
+    (st.success if ok == len(MANIFEST) else st.error)(
+        f"{ok}/{len(MANIFEST)} samples got their expected decision. Open any run on the Audit Trail page.")
+
 
 for rid in st.session_state.get("last_runs", [])[-1:]:
     run = repo.get_run(rid)

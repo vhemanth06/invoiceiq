@@ -7,8 +7,7 @@
    capped; a misread total that is visibly correct on the page is blamed on extraction, not the vendor.
 4. **Fail soft to REVIEW.** Any processing error routes to a human. "I couldn't check this" never becomes an
    approval. Unreadable documents are rejected back to the vendor.
-5. **Free-tier LLMs with a fallback chain and a cache.** Groq (text + vision) → Gemini →
-   OCR. Model names live in `.env`. Cached extractions keep a live demo alive without Wi-Fi or quota and are
+5. **Free-tier LLMs with a fallback chain and a cache.** Groq (text + vision) → OCR. Model names live in `.env`. Cached extractions keep a live demo alive without Wi-Fi or quota and are
    labelled "cached" in the UI.
 6. **Tests run offline.** A test-only fake provider (`tests/conftest.py`) returns the generator's ground
    truth for the bundled samples, so the suite is deterministic and needs no API key.

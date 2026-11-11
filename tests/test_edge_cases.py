@@ -12,7 +12,7 @@ import yaml
 from core import config
 from core.pipeline import run_pipeline
 
-MANIFEST = yaml.safe_load((config.SAMPLES_DIR / "manifest.yaml").read_text())
+MANIFEST = [m for m in yaml.safe_load((config.SAMPLES_DIR / "manifest.yaml").read_text()) if m.get("golden", True)]
 
 
 @pytest.fixture(scope="module")
@@ -79,12 +79,12 @@ def test_not_a_pdf_rejected(fresh_db):
 
 
 @pytest.mark.live
-@pytest.mark.skipif(os.getenv("RUN_LIVE") != "1", reason="set RUN_LIVE=1 and GEMINI_API_KEY to run")
-def test_live_gemini_extraction():
+@pytest.mark.skipif(os.getenv("RUN_LIVE") != "1", reason="set RUN_LIVE=1 and GROQ_API_KEY to run")
+def test_live_groq_extraction():
     from core.llm.base import Payload
-    from core.llm.gemini_client import GeminiProvider
+    from core.llm.groq_client import GroqProvider
     import pymupdf
     path = config.SAMPLES_DIR / "invoices" / "01_happy_acme_inv1042.pdf"
     text = pymupdf.open(path)[0].get_text()
-    inv = GeminiProvider().extract(Payload("live", "text", text=text))
+    inv = GroqProvider().extract(Payload("live", "text", text=text))
     assert "1042" in str(inv.invoice_number.value)

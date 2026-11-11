@@ -46,7 +46,9 @@ def run(ctx) -> StageResult:
         inv, provider, attempts = router.extract(payload)
     except router.ExtractionFailed as e:
         ctx.processing_errors.append((NAME, str(e)))
-        return StageResult(StageStatus.FAIL, "Manual entry needed: no provider could read this document",
+        why = [a for a in e.attempts if any(k in a for k in ("failed", "quota", "rate limited"))]
+        return StageResult(StageStatus.FAIL, "Manual entry needed: " + ("; ".join(why) or
+                                                                        "no provider could read this document"),
                            {"attempts": e.attempts}, halt=True)
     ctx.extraction, ctx.provider = inv, provider
 

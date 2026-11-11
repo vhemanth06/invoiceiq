@@ -1,25 +1,38 @@
 """Provider fallback chain for extraction and explanations, with caching and an OCR fallback."""
 from __future__ import annotations
 
+import hashlib
 import shutil
+import time
 
 from loguru import logger
 from pydantic import ValidationError
 
 from core import config
 from core.llm import cache
-from core.llm.base import Payload, ProviderError
-from core.llm.gemini_client import GeminiProvider
+from core.llm.base import Payload, ProviderError, RateLimited
 from core.llm.groq_client import GroqProvider
 from core.models import ExtractedInvoice, FieldSource
 
-PROVIDERS = {"groq": GroqProvider, "gemini": GeminiProvider}
+PROVIDERS = {"groq": GroqProvider}
 
 
 class ExtractionFailed(Exception):
     def __init__(self, msg: str, attempts: list[str]):
         super().__init__(msg)
         self.attempts = attempts
+
+
+_blocked: dict[str, tuple[float, str]] = {}  # provider -> (until epoch, reason), after a RateLimited
+
+
+def _skip_blocked(name: str, attempts: list[str] | None = None) -> bool:
+    until, why = _blocked.get(name, (0, ""))
+    if time.time() >= until:
+        return False
+    if attempts is not None:
+        attempts.append(f"{name}: skipped, {why}")
+    return True
 
 
 def _providers():
@@ -34,6 +47,8 @@ def _try_chain(payload: Payload, attempts: list[str], use_cache: bool) -> tuple[
         if not prov.available():
             attempts.append(f"{prov.name}: not configured")
             continue
+        if _skip_blocked(prov.name, attempts):
+            continue
         cacheable = use_cache
         if cacheable and (hit := cache.get(payload.file_hash + payload.route, prov.name, prov.model)):
             attempts.append(f"{prov.name}: cache hit")
@@ -44,6 +59,11 @@ def _try_chain(payload: Payload, attempts: list[str], use_cache: bool) -> tuple[
                 cache.put(payload.file_hash + payload.route, prov.name, prov.model, result.model_dump(mode="json"))
             attempts.append(f"{prov.name}: ok")
             return result, prov.name
+        except RateLimited as e:
+            _blocked[prov.name] = (e.until, str(e))
+            logger.warning(f"{prov.name}: {e}; falling back")
+            attempts.append(f"{prov.name}: {e}")
+            continue
         except (ProviderError, ValidationError, Exception) as e:
             logger.warning(f"{prov.name} failed: {e}; falling back")
             attempts.append(f"{prov.name}: failed ({str(e)[:120]})")
@@ -85,11 +105,19 @@ def extract(payload: Payload, use_cache: bool | None = None) -> tuple[ExtractedI
 
 def explain(prompt: str) -> tuple[str, str] | None:
     """Free-text completion for explanations. Returns (text, model used) or None if nobody can."""
+    key = hashlib.sha256(prompt.encode()).hexdigest()  # same findings -> same note; reruns cost no quota
     for prov in _providers():
-        if not prov.available():
+        if not prov.available() or _skip_blocked(prov.name):
             continue
+        if hit := cache.get(key, prov.name, prov.model):
+            return hit["text"], prov.model or prov.name
         try:
-            return prov.text(prompt), prov.model or prov.name  # e.g. "openai/gpt-oss-120b", not "groq"
+            text = prov.text(prompt)
+            cache.put(key, prov.name, prov.model, {"text": text})
+            return text, prov.model or prov.name  # e.g. "openai/gpt-oss-120b", not "groq"
+        except RateLimited as e:
+            _blocked[prov.name] = (e.until, str(e))
+            logger.warning(f"{prov.name} explanation skipped: {e}")
         except Exception as e:
             logger.warning(f"{prov.name} explanation failed: {e}")
     return None

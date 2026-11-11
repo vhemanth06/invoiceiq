@@ -20,7 +20,7 @@ Eight stages, each `run(ctx) -> StageResult(status, summary, details, halt)`.
   confidence is **verified**: if the total disagrees with lines + tax, `total` confidence is capped at 0.5.
 - **Fallbacks:** next provider → Tesseract OCR + text model (if installed) → "manual entry needed"
   (processing error, halt → **REVIEW**).
-- **Event:** `{"provider": "gemini (cached)", "attempts": [...], "confidence_adjustments": [...], "extraction": {...}}`
+- **Event:** `{"provider": "groq (cached)", "attempts": [...], "confidence_adjustments": [...], "extraction": {...}}`
 
 ## 4 Normalise (`s4_normalize.py`)
 - **Does:** amounts (`Rs. 1,18,000/-` → `118000.0`), dates (many formats; ambiguous DD/MM recorded as
